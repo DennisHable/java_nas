@@ -8,3 +8,9 @@ A custom Network Attached Storage (NAS) application developed with a Java Spring
 * **User Authentication:** Secure login and user access control via Spring Security.
 * **REST API:** Modular backend services communicating with a responsive React UI.
 * **Database Storage:** Relational data management using PostgreSQL for indexing files and user metadata.
+
+You can spin up the entire stack (Backend, Frontend, and Database) using Docker Compose
+
+```bash
+docker compose up -d
+```
