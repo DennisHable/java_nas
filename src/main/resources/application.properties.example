@@ -1,0 +1,30 @@
+spring.application.name=nas
+
+# conneting to PostgreSQL db
+spring.datasource.url=jdbc:postgresql://localhost:5432/nas
+spring.datasource.username=<<user>>
+spring.datasource.password=<<password>>
+
+# JPA / Hibernate config
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# turn off Open-In-View (better db performance)
+spring.jpa.open-in-view=false
+
+
+# browser will not send JSESSIONID from foreign web pages (CSRF protection)
+server.servlet.session.cookie.same-site=strict
+
+# production version with HTTPS -> true
+server.servlet.session.cookie.secure=false
+
+spring.servlet.multipart.max-file-size=10GB
+
+spring.servlet.multipart.max-request-size=10GB
+
+server.servlet.session.timeout=1d
+
+
