@@ -5,14 +5,16 @@ import cz.dhable.projects.nas.model.entity.Role;
 
 public class UserInputReqDto {
     @JsonProperty("username")
-    private String userName;
-    private Role role;
-    private String password;
-    private String email;
+    private final String userName;
+    private final Role role;
+    private final String password;
+    private final String email;
+    private final Boolean rememberMe;
 
-    public UserInputReqDto(String userName, String password, String email) {
+    public UserInputReqDto(String userName, String password, String email, Boolean rememberMe) {
         this.userName = userName;
         this.email = email;
+        this.rememberMe = rememberMe;
         this.role = Role.USER;
         this.password = password;
     }
@@ -31,5 +33,9 @@ public class UserInputReqDto {
 
     public String getEmail() {
         return email;
+    }
+
+    public Boolean isRememberMe() {
+        return rememberMe;
     }
 }

@@ -3,11 +3,11 @@ package cz.dhable.projects.nas.model.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserOutputReqDto {
-    private Long id;
+    private final Long id;
     @JsonProperty("username")
-    private String userName;
-    private String role;
-    private String email;
+    private final String userName;
+    private final String role;
+    private final String email;
 
     public UserOutputReqDto(Long id, String userName, String role, String email) {
         this.id = id;
