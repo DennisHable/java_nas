@@ -3,8 +3,8 @@ package cz.dhable.projects.nas.model.dto;
 import java.util.List;
 
 public class FolderContentDto {
-    private List<FolderResponseDto> subFolders;
-    private List<FileResponseDto> files;
+    private final List<FolderResponseDto> subFolders;
+    private final List<FileResponseDto> files;
 
     public FolderContentDto(List<FolderResponseDto> subFolders, List<FileResponseDto> files) {
         this.subFolders = subFolders;
