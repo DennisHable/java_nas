@@ -94,6 +94,15 @@ public class AuthService {
         // získáme/vytvoříme(true) HTTP Session (Tomcat automaticky vygeneruje a pošle uživateli JSESSIONID cookie)
         HttpSession session = request.getSession(true);
 
+
+        // nastavení expirace relace podle checkboxu
+        if (Boolean.TRUE.equals(userInputReqDto.isRememberMe())) {
+            session.setMaxInactiveInterval((int)rememberMeTime.getSeconds()); // jak dlouho bude Spring držet data o přihlášeném uživ. v session (v RAM) od poslední aktivity (tedy po aktivitě se to automaticky opět prodlouží)
+        } else {
+            session.setMaxInactiveInterval((int)standardLogoutTime.getSeconds());
+        }
+
+
         // uložíme identitu uživatele do Security Contextu
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(auth);
