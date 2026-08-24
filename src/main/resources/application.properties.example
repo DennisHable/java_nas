@@ -25,6 +25,13 @@ spring.servlet.multipart.max-file-size=10GB
 
 spring.servlet.multipart.max-request-size=10GB
 
-server.servlet.session.timeout=1d
 
+# Nastavení platnosti cookie ('m' pro minuty, 'h' pro hodiny, 'd' pro dny)
+server.servlet.session.timeout=1d
+app.security.remember-me-time=7d
+app.security.standard-logout-time=30m
+# jak dlouho prohlížeč uchovává to cookie v paměti u klienta (i po restartu; ukládá na disk)
+# i když na serveru bude nastaven čas na míň tak u klienta zůstane a server to pak odmítne, že je neplatná cookie (401 Unauthorized)
+server.servlet.session.cookie.max-age=7d
+# Spring také automaticky provádí aktualizaci hlavičky u prohlížeče
 
