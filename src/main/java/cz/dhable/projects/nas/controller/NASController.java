@@ -9,6 +9,8 @@ import cz.dhable.projects.nas.repository.StoredFileRepository;
 import cz.dhable.projects.nas.service.FileService;
 import cz.dhable.projects.nas.service.FolderService;
 import cz.dhable.projects.nas.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.HttpHeaders;
