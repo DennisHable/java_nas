@@ -34,7 +34,14 @@ public class StorageRootService {
         if (storageRootRepository.existsByBasePath(dto.getBasePath())) {
             throw new IllegalArgumentException("A disk with this path already exists in the system.");
         }
-        return storageRootRepository.save(new StorageRoot(dto.getBasePath(), dto.getDiskName())); // uložení disku do DB
+        String basePath = dto.getBasePath();
+
+        // pokud cesta končí lomítkem a není to samotné kořenové lomítko "/"
+        if (basePath.endsWith("/") && basePath.length() > 1) {
+            basePath = basePath.substring(0, basePath.length() - 1); // odebereme ho
+        }
+
+        return storageRootRepository.save(new StorageRoot(basePath, dto.getDiskName())); // uložení disku do DB
     }
 
     /**
