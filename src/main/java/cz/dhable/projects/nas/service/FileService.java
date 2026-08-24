@@ -386,4 +386,38 @@ public class FileService {
     }
 
 
+    public void streamZipArchive(List<UUID> fileIds, OutputStream outputStream) { // máme paměťový stream, do kterého budeme zapisovat data ZIPu
+        try (ZipOutputStream zos = new ZipOutputStream(outputStream)) { // bere data a za běhu z nich dělá ZIP; posílá ho do přímo do outputStreamu, který se sem předal v parametru, přes ten to jde přímo ke klientovi
+
+            // projdeme všechna zaslaná ID souborů
+            for (UUID fileId : fileIds) {
+                // Načteme soubor z DB, abychom znali jeho originální název a fyzickou cestu na disku
+                StoredFile storedFile = fileRepository.findById(fileId)
+                        .orElseThrow(() -> new RuntimeException("Soubor s ID " + fileId + " neexistuje"));
+
+                Path filePath = Paths.get(storedFile.getPhysicalPath()); // cesta na disku
+
+                // Kontrola, zda soubor reálně existuje na pevném disku serveru
+                if (!Files.exists(filePath)) {
+                    // klidně jen přeskočíme
+                    continue;
+                }
+
+                // vytvoříme nový záznam (záznam v tabulce obsahu ZIPu) s originálním názvem souboru; hlavička konkrétního souboru (název, datum vytvoření, velikost, ...)
+                ZipEntry zipEntry = new ZipEntry(storedFile.getOriginalName());
+                zos.putNextEntry(zipEntry); // značí začátek toho souboru ve streamu
+
+                // otevře soubor, čte po částech do bufferu (z pevného disku serveru), zapíše do ZIP streamu, ten to pošle; přečte další data a opakuje
+                Files.copy(filePath, zos);
+
+                // Uzavřeme záznam pro tento konkrétní soubor, ukončení souboru ve streamu
+                zos.closeEntry();
+            }
+
+            // před dokončením metody musíme vynutit zapsání všech zbývajících dat do ZIPu
+            zos.finish();
+        } catch (IOException e) {
+            throw new RuntimeException("Chyba při generování ZIP archivu na serveru", e);
+        }
+    }
 }
