@@ -7,16 +7,21 @@ import cz.dhable.projects.nas.repository.SharePermissionRepository;
 import cz.dhable.projects.nas.repository.StorageRootRepository;
 import cz.dhable.projects.nas.repository.StoredFileRepository;
 import cz.dhable.projects.nas.util.StoragePathResolver;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourceRegion;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRange;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -25,6 +30,8 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Service
 public class FileService {
@@ -307,7 +314,7 @@ public class FileService {
                 .orElseThrow(() -> new RuntimeException("File was not found"));
 
         User currentUser = userRepository.findByUsername(currentUsername);
-        if(currentUser == null) throw new RuntimeException("User was not found");
+        if (currentUser == null) throw new RuntimeException("User was not found");
 
         // Kontrola práv zápisu: Vlastník, ADMIN, nebo SharePermission s canWrite = true
         boolean hasWriteAccess = storedFile.getOwner().getId().equals(currentUser.getId())
@@ -335,7 +342,7 @@ public class FileService {
                 .orElseThrow(() -> new RuntimeException("File was not found"));
 
         User currentUser = userRepository.findByUsername(currentUsername);
-        if(currentUser == null) throw new RuntimeException("User was not found");
+        if (currentUser == null) throw new RuntimeException("User was not found");
 
 
         // Kontrola práv zápisu (Vlastník, ADMIN, nebo SharePermission s canWrite = true)
@@ -362,7 +369,7 @@ public class FileService {
                 .orElseThrow(() -> new RuntimeException("File was not found"));
 
         User currentUser = userRepository.findByUsername(currentUsername);
-        if(currentUser == null) throw new RuntimeException("User was not found");
+        if (currentUser == null) throw new RuntimeException("User was not found");
 
         Folder targetFolder = null;
         if (targetFolderId != null) {
