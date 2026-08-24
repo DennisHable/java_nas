@@ -70,8 +70,8 @@ class SharePermissionTest {
     void testResourceSharingLifecycle() throws Exception {
 
         // registrace a login uživatele A (Vlastník) a uživatele B (Návštěvník)
-        UserInputReqDto userADto = new UserInputReqDto("owner_user", "password123", "a@b.cz");
-        UserInputReqDto userBDto = new UserInputReqDto("visitor_user", "password123", "c@b.cz");
+        UserInputReqDto userADto = new UserInputReqDto("owner_user", "password123", "a@b.cz", false);
+        UserInputReqDto userBDto = new UserInputReqDto("visitor_user", "password123", "c@b.cz", false);
 
         // registrace obou
         mockMvc.perform(post("/api/auth/register").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userADto))).andExpect(status().isCreated());

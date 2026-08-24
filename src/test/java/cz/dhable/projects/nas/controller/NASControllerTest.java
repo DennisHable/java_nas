@@ -29,18 +29,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-// obsaháhlejší integrační testy, bez mocků Service a Repa; testuje se reálné nasazení
-
+// obsaháhlejší integrační testy, testuje se reálné nasazení
 @Transactional // rollback po každém testu, přidání testů nelze už použít (neproběhly by zápisy do db; až na konci)
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
+@ActiveProfiles("test") // vytváří se in-memory DB H2 dle application-test.properties; tedy data se zapisují do testovacích databazí
 class NASControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    private MockMvc mockMvc; // umožňuje simulovat HTTP požadavky a posílat je do controllerů; vše běží in-memory, bez portů
 
-    @Autowired
+    @Autowired // vytvoří se instance, když je pak vyžadována někde jinde provede se Dependency Injection v UserService, ...
     private cz.dhable.projects.nas.repository.UserRepository userRepository;
 
     @Autowired
@@ -75,7 +74,7 @@ class NASControllerTest {
     void testNasLifecycle() throws Exception {
 
         // registrace, login uživ.; získání platné relace
-        UserInputReqDto userDto = new UserInputReqDto("nas_test_user", "heslo123", "a@b.cz");
+        UserInputReqDto userDto = new UserInputReqDto("nas_test_user", "heslo123", "a@b.cz", false);
 
         // příprava a spuštění virutálního HTTP požadavku; arg je builder req
         mockMvc.perform(post("/api/auth/register") // statická metoda - vytvoří req builder pro POST na danou adresu
@@ -147,7 +146,7 @@ class NASControllerTest {
     @DisplayName("Test NAS: Registrace -> Login -> Nahrání -> Stažení (Ověření textu uvnitř)")
     void testUploadAndDownloadContent() throws Exception {
         // opět registrace uživatele a login
-        UserInputReqDto userDto = new UserInputReqDto("nas_test_user", "heslo123", "a@b.cz");
+        UserInputReqDto userDto = new UserInputReqDto("nas_test_user", "heslo123", "a@b.cz", false);
 
         mockMvc.perform(post("/api/auth/register").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userDto)));
         MockHttpSession session = (MockHttpSession) mockMvc.perform(post("/api/auth/login").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(userDto))).andReturn().getRequest().getSession();

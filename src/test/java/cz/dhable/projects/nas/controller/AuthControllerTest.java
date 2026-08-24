@@ -18,8 +18,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-// obsaháhlejší integrační testy, bez mocků Service a Repa; testuje se reálné nasazení
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test") // aktivuje paměťovou H2 databázi z application-test.properties
@@ -37,7 +35,7 @@ class AuthControllerTest {
         // ==========================================
         // Registrace nového uživatele
         // ==========================================
-        UserInputReqDto registerDto = new UserInputReqDto("test_user", "heslo123", "a@b.cz");
+        UserInputReqDto registerDto = new UserInputReqDto("test_user", "heslo123", "a@b.cz", false);
 
         // spustění simulovaného HTTP požadavku; podobně jako reálný požadavek pomocí curl
         mockMvc.perform(post("/api/auth/register")
@@ -65,7 +63,7 @@ class AuthControllerTest {
         // ==========================================
         // 3. KROK: Přihlášení (Login) a získání Session
         // ==========================================
-        UserInputReqDto loginDto = new UserInputReqDto("test_user", "heslo123", "a@b.cz");
+        UserInputReqDto loginDto = new UserInputReqDto("test_user", "heslo123", "a@b.cz", false);
 
         MvcResult loginResult = mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
