@@ -255,5 +255,27 @@ public class NASController {
     }
 
 
+    /**
+     * Stahování vícero souborů v ZIP archivu.
+     *
+     * @param fileIds - id souborů
+     */
+    @PostMapping("/files/download-zip")
+    public void downloadZip(@RequestBody List<UUID> fileIds, HttpServletResponse response) {
+        // nastavíme HTTP hlavičky pro stahování souboru
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE); // posílaná data nejsou textová, ale binární proud bajtů
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"files.zip\""); // nebude to otvírat v prohlížeči jako novou stránku; bere to jako přílohu (attachment) a uloží to na disk pod názvem files.zip; tedy automaticky po těch hlavičkách to začne prohlížeč stahovat
+
+        try {
+            // předáme síťový výstupní proud přímo do service (data potečou přes server, síť až přímo ke klientovi)
+            fileService.streamZipArchive(fileIds, response.getOutputStream());
+
+            // pošleme zbytek dat ze serveru v bufferu po sítí
+            response.flushBuffer();
+        } catch (IOException e) {
+            throw new RuntimeException("Chyba při inicializaci stahování ZIPu", e);
+        }
+    }
+
 }
 
