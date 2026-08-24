@@ -26,12 +26,19 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service // business logic; vytvoří instanci a uloží ji do aplikačního kontextu; dependency injection v jiných třídách
 public class AuthService {
+
+    @Value("${app.security.remember-me-time:7d}")
+    private Duration rememberMeTime; // Spring sám převede "7d" na objekt Duration; další (lepší) možností je nová konfig. třída (označená: @Configuration a @ConfigurationProperties(prefix = "app.security"))
+
+    @Value("${app.security.standard-logout-time:30m}")
+    private Duration standardLogoutTime;
 
     private final UserService userService;
     private final UserRepository userRepository;
