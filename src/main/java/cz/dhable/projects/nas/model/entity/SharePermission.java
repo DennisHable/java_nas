@@ -70,4 +70,16 @@ public class SharePermission {
     public void setCanWrite(boolean canWrite) {
         this.canWrite = canWrite;
     }
+
+    public void setSharedWith(User sharedWith) {
+        this.sharedWith = sharedWith;
+    }
+
+    public void setStoredFile(StoredFile storedFile) {
+        this.storedFile = storedFile;
+    }
+
+    public void setFolder(Folder folder) {
+        this.folder = folder;
+    }
 }
