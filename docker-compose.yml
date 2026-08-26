@@ -1,0 +1,65 @@
+# version: '3.8' # není vyžadování
+
+services:
+  # 1. POSTGRESQL DATABÁZE
+  postgre-db:
+    image: postgres:16-alpine
+    restart: always # spustit po restartu serveru
+    container_name: nas-db
+    environment:
+      POSTGRES_USER: <<db_username>>
+      POSTGRES_PASSWORD: <<db_password>>
+      POSTGRES_DB: nas
+    ports:
+      - "5432:5432"
+    volumes:
+      # Data z databáze se fyzicky uloží do složky ~/data/postgres_data
+      # izolovaný svazek, data v DB přežijí restart OS
+      - ./postgres_data:/var/lib/postgresql/data
+    networks:
+      - docker-home-network
+
+  # 2. SPRING BOOT BACKEND
+  nas-backend:
+    restart: always # spustit po restartu serveru
+    build:
+      context: ./code/nas-backend # cesta ke složce s Javou (s dockerfilem)
+    container_name: nas-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgre-db:5432/nas
+      - SPRING_DATASOURCE_USERNAME=<<db_username>>
+      - SPRING_DATASOURCE_PASSWORD=<<dd_password>>
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update # Hibernate automaticky vytvoří tabulky v Postgresu při prvním startu
+    volumes:
+      # ukládání na externí disky
+      # Do kontejneru propustíme linuxové složky /mnt  (disky jsou mountnutý v /mnt). 
+      # Když ADMIN k Debianu připojí externí disk do /mnt/ssd_disk, 
+      # Java v kontejneru na něj bude moct bez problému zapisovat pod stejnou cestou
+      - /mnt:/mnt
+      # - /media:/media
+      # možnost ukládat lokálně do ~/data/nas_data
+      - ./nas_data:/home/administrator/data/nas_data
+    depends_on:
+      - postgre-db # Počká, dokud nenastartuje databáze
+    networks:
+      - docker-home-network
+
+  # 3. REACT FRONTEND + NGINX PROXY
+  nas-frontend:
+    restart: always # spustit po restartu serveru
+    build:
+      context: ./code/nas-frontend # cesta ke složce s Reactem
+    container_name: nas-frontend
+    ports:
+      - "80:80" # NAS bude na serveru dostupný na klasickém portu 80 (přes IP adresu bez portu)
+    depends_on:
+      - nas-backend
+    networks:
+      - docker-home-network
+             
+networks:
+  docker-home-network:
+    driver: bridge # interní virtuální síť, kontejnery na sebe vidí pomocí svých jmen
+
