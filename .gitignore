@@ -1,10 +1,27 @@
-HELP.md
-target/
-.mvn/wrapper/maven-wrapper.jar
+# === BACKEND (Spring Boot v nas_backend/) ===
+nas_backend/target/
+nas_backend/.mvn/
+nas_backend/HELP.md
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
+# === FRONTEND (React v nas_frontend/) ===
+nas_frontend/node_modules/
+nas_frontend/dist/
+nas_frontend/.env.local
+nas_frontend/.env.development.local
+nas_frontend/.env.test.local
+nas_frontend/.env.production.local
+nas_frontend/npm-debug.log*
+nas_frontend/yarn-debug.log*
+nas_frontend/yarn-error.log*
+
+# === IDEs & Vývojářské nástroje (celý projekt) ===
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
 .apt_generated
 .classpath
 .factorypath
@@ -12,12 +29,6 @@ target/
 .settings
 .springBeans
 .sts4-cache
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
 
 ### NetBeans ###
 /nbproject/private/
@@ -29,9 +40,6 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
-.vscode/
-
 
 ### App props ####
-application.properties
+nas_backend/src/main/resources/application.properties
