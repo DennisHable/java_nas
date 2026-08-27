@@ -1,0 +1,7 @@
+@import "tailwindcss"; /* <--- Jediný řádek pro aktivaci Tailwind v4 */
+
+body {
+  background-color: #09090b; /* Naše přísná tmavá dark mode barva */
+  color: #f4f4f5;
+  margin: 0;
+}
