@@ -8,7 +8,9 @@ services:
     container_name: nas-db
     environment:
       POSTGRES_USER: <<db_username>>
+      # NUTNÉ UPRAVIT!!! stejně tak v application.properties v nas_backend/...
       POSTGRES_PASSWORD: <<db_password>>
+      # NUTNÉ UPRAVIT!!!
       POSTGRES_DB: nas
     ports:
       - "5432:5432"
@@ -23,7 +25,7 @@ services:
   nas-backend:
     restart: always # spustit po restartu serveru
     build:
-      context: ./code/nas-backend # cesta ke složce s Javou (s dockerfilem)
+      context: .nas_backend # cesta ke složce s Javou (s dockerfilem)
     container_name: nas-backend
     ports:
       - "8080:8080"
@@ -40,6 +42,7 @@ services:
       - /mnt:/mnt
       # - /media:/media
       # možnost ukládat lokálně do ~/data/nas_data
+      # NUTNÉ UPRAVIT!!!
       - ./nas_data:/home/administrator/data/nas_data
     depends_on:
       - postgre-db # Počká, dokud nenastartuje databáze
@@ -50,7 +53,7 @@ services:
   nas-frontend:
     restart: always # spustit po restartu serveru
     build:
-      context: ./code/nas-frontend # cesta ke složce s Reactem
+      context: ./nas_frontend # cesta ke složce s Reactem
     container_name: nas-frontend
     ports:
       - "80:80" # NAS bude na serveru dostupný na klasickém portu 80 (přes IP adresu bez portu)
