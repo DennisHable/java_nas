@@ -36,7 +36,7 @@ fully containerized using **Docker Compose**.
 
 ## Tech Stack
 
-* **Backend:** Java 17+, Spring Boot, Spring Security, Spring Data JPA
+* **Backend:** Java 21+, Spring Boot, Spring Security, Spring Data JPA
 * **Frontend:** React, Tailwind CSS, Lucide Icons
 * **Database:** PostgreSQL 16
 * **Web Server & Reverse Proxy:** Nginx (Alpine)
