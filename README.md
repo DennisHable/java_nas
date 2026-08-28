@@ -100,7 +100,7 @@ The application runs in isolated containers managed by Docker Compose on a dedic
 
 1. **Clone the repository:**
 ```bash
-git clone [https://github.com/DennisHable/java_nas.git](https://github.com/DennisHable/java_nas.git)
+git clone https://github.com/DennisHable/java_nas.git
 cd java_nas
 ```
 
@@ -118,9 +118,7 @@ docker-compose up -d --build
 
 4. **Access the Application:**
 Open your browser and navigate to:
-```
-[http://localhost/](http://localhost:5173/)
-```
+[NAS](http://localhost:5173/)
 
 ---
 
