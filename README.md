@@ -6,6 +6,12 @@ fully containerized using **Docker Compose**.
 
 ![Home NAS Preview](nas_example.png)
 
+## Live Server Infrastructure
+
+The application is deployed on a dedicated **Debian Linux** home server running **Portainer** for container management:
+
+![Portainer Container List](portainer_preview.png)
+
 ---
 
 ## Features
