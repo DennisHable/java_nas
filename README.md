@@ -119,7 +119,7 @@ POSTGRES_PASSWORD: your_password
 
 3. **Build & Start Containers:**
 ```bash
-docker-compose up -d --build
+docker compose up -d --build
 ```
 
 4. **Access the Application:**
